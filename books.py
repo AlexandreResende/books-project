@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, Body
 
 app = FastAPI()
 
@@ -32,3 +32,12 @@ async def get_book_by_id(book_id: int, response: Response):
 
     response.status_code = status.HTTP_404_NOT_FOUND
     return { "message": "Book not found" }
+
+@app.post("/books")
+async def create_book(response: Response, new_book=Body()):
+    books_length = len(books)
+    books.append({ 'id': books_length + 1, **new_book })
+
+    response.status_code = status.HTTP_201_CREATED
+
+    return {}
