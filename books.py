@@ -41,3 +41,18 @@ async def create_book(response: Response, new_book=Body()):
     response.status_code = status.HTTP_201_CREATED
 
     return {}
+
+@app.put("/books/{book_id}")
+async def update_book(book_id: int, response: Response, updated_book=Body()):
+    for book in books:
+        if book.get("id") == book_id:
+            # remove occurrence of old book from list
+            books.remove(book)
+            # overwrite data from old book with new book data
+            book = { **book, **updated_book }
+            # append updated book to list
+            books.append(book)
+            return book
+
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return { "message": "Book not found" }
