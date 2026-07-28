@@ -33,6 +33,15 @@ async def get_book_by_id(book_id: int, response: Response):
     response.status_code = status.HTTP_404_NOT_FOUND
     return { "message": "Book not found" }
 
+@app.get("/books")
+async def get_books_by_author(author: str, response: Response):
+    authors_books = []
+    for book in books:
+        if book.get("author").casefold() == author:
+            authors_books.append(book)
+
+    return { "books": authors_books }
+
 @app.post("/books")
 async def create_book(response: Response, new_book=Body()):
     books_length = len(books)
