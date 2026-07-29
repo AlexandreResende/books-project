@@ -1,4 +1,4 @@
-from fastapi import  FastAPI, Response
+from fastapi import  FastAPI, Body, Response, status
 
 from Entities.bookEntity import Book
 
@@ -15,3 +15,13 @@ async def health_check():
 @app.get("/books")
 async def get_all_books():
     return { "books": BOOKS }
+
+@app.post("/books")
+async def create_book(response: Response, new_book=Body()):
+    print(new_book)
+    BOOKS.append(
+        Book(len(BOOKS) + 1, new_book.get("title"), new_book.get("author"), new_book.get("description"), new_book.get("rating"))
+    )
+
+    response.status_code = status.HTTP_201_CREATED
+    return {}
