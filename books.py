@@ -8,3 +8,6 @@ BOOKS = []
 async def health_check():
     return { "message": "Ok" }
 
+@app.get("/books")
+async def get_all_books():
+    return { "books": BOOKS }
