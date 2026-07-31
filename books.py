@@ -1,6 +1,7 @@
-from fastapi import  FastAPI, Body, Response, status
+from fastapi import  FastAPI, Response, status
 
 from Entities.bookEntity import Book
+from Requests.createBookRequest import CreateBookRequest
 
 app = FastAPI()
 
@@ -17,10 +18,9 @@ async def get_all_books():
     return { "books": BOOKS }
 
 @app.post("/books")
-async def create_book(response: Response, new_book=Body()):
-    print(new_book)
+async def create_book(response: Response, new_book: CreateBookRequest):
     BOOKS.append(
-        Book(len(BOOKS) + 1, new_book.get("title"), new_book.get("author"), new_book.get("description"), new_book.get("rating"))
+        Book(len(BOOKS) + 1, **new_book.model_dump())
     )
 
     response.status_code = status.HTTP_201_CREATED
