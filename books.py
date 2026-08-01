@@ -60,3 +60,11 @@ async def update_book(book_id: int, updated_book: UpdateBookRequest, response: R
 
     response.status_code = status.HTTP_404_NOT_FOUND
     return { "message": "Book not found" }
+
+@app.delete("/books/{book_id}")
+async def delete_book_by_id(book_id: int):
+    for book in BOOKS:
+        if book.id == book_id:
+            BOOKS.remove(book)
+
+    return { "message": "Book deleted successfully" }
