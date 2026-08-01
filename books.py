@@ -25,3 +25,12 @@ async def create_book(response: Response, new_book: CreateBookRequest):
 
     response.status_code = status.HTTP_201_CREATED
     return {}
+
+@app.get("/books/{book_id}")
+async def get_book_by_id(book_id: int, response: Response):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return { "message": "Book not found" }
