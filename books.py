@@ -7,6 +7,9 @@ app = FastAPI()
 
 BOOKS = [
     Book(1, "Eragon", "Christopher Paolini", "Inheritance trilogy", 5),
+    Book(2, "Eldest", "Christopher Paolini", "Inheritance trilogy", 4),
+    Book(3, "Brisingr", "Christopher Paolini", "Inheritance trilogy", 5),
+    Book(4, "Inheritance", "Christopher Paolini", "Inheritance trilogy", 3),
 ]
 
 @app.get("/healthz")
@@ -34,3 +37,14 @@ async def get_book_by_id(book_id: int, response: Response):
 
     response.status_code = status.HTTP_404_NOT_FOUND
     return { "message": "Book not found" }
+
+@app.get("/books/")
+async def get_books_by_rating(rating: int):
+    books = []
+    print(rating)
+
+    for book in BOOKS:
+        if book.rating == rating:
+            books.append(book)
+
+    return { "books": books }
