@@ -2,6 +2,7 @@ from fastapi import  FastAPI, Response, status
 
 from Entities.bookEntity import Book
 from Requests.createBookRequest import CreateBookRequest
+from Requests.updateBookRequest import UpdateBookRequest
 
 app = FastAPI()
 
@@ -48,3 +49,14 @@ async def get_books_by_rating(rating: int):
             books.append(book)
 
     return { "books": books }
+
+@app.put("/books/{book_id}")
+async def update_book(book_id: int, updated_book: UpdateBookRequest, response: Response):
+    for book in BOOKS:
+        if book.id == book_id:
+            book.update_book(updated_book.author, updated_book.title, updated_book.description, updated_book.rating)
+
+            return book
+
+    response.status_code = status.HTTP_404_NOT_FOUND
+    return { "message": "Book not found" }
