@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import  FastAPI, Response, status
 
 from Entities.bookEntity import Book
@@ -40,13 +42,12 @@ async def get_book_by_id(book_id: int, response: Response):
     return { "message": "Book not found" }
 
 @app.get("/books/")
-async def get_books_by_rating(rating: int):
-    books = []
-    print(rating)
-
-    for book in BOOKS:
-        if book.rating == rating:
-            books.append(book)
+async def get_books_by_filter(rating: Optional[int] = None, published_year_date: Optional[int] = None):
+    books = [
+        book for book in BOOKS
+        if (rating is None or book.rating == rating)
+        and (published_year_date is None or book.published_year_date == published_year_date)
+    ]
 
     return { "books": books }
 
