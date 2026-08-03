@@ -7,10 +7,10 @@ from Requests.updateBookRequest import UpdateBookRequest
 app = FastAPI()
 
 BOOKS = [
-    Book(1, "Eragon", "Christopher Paolini", "Inheritance trilogy", 5),
-    Book(2, "Eldest", "Christopher Paolini", "Inheritance trilogy", 4),
-    Book(3, "Brisingr", "Christopher Paolini", "Inheritance trilogy", 5),
-    Book(4, "Inheritance", "Christopher Paolini", "Inheritance trilogy", 3),
+    Book(1, "Eragon", "Christopher Paolini", "Inheritance trilogy", 5,  2005),
+    Book(2, "Eldest", "Christopher Paolini", "Inheritance trilogy", 4, 2006),
+    Book(3, "Brisingr", "Christopher Paolini", "Inheritance trilogy", 5, 2007),
+    Book(4, "Inheritance", "Christopher Paolini", "Inheritance trilogy", 3, 2009),
 ]
 
 @app.get("/healthz")
