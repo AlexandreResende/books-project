@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 
-from fastapi import  FastAPI, Path, Query, Response, HTTPException, status
+from fastapi import  FastAPI, Path, Query, HTTPException, status
 
 from Entities.bookEntity import Book
 from Requests.createBookRequest import CreateBookRequest
@@ -24,17 +24,16 @@ async def health_check():
 async def get_all_books():
     return { "books": BOOKS }
 
-@app.post("/books")
-async def create_book(response: Response, new_book: CreateBookRequest):
+@app.post("/books", status_code=status.HTTP_201_CREATED)
+async def create_book(new_book: CreateBookRequest):
     BOOKS.append(
         Book(len(BOOKS) + 1, **new_book.model_dump())
     )
 
-    response.status_code = status.HTTP_201_CREATED
     return {}
 
 @app.get("/books/{book_id}")
-async def get_book_by_id(response: Response, book_id: int = Path(gt=0)):
+async def get_book_by_id(book_id: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
             return book
@@ -52,7 +51,7 @@ async def get_books_by_filter(rating: Optional[int] = Query(gt=0, lt=6, default=
     return { "books": books }
 
 @app.put("/books/{book_id}")
-async def update_book(book_id: int, updated_book: UpdateBookRequest, response: Response):
+async def update_book(book_id: int, updated_book: UpdateBookRequest):
     for book in BOOKS:
         if book.id == book_id:
             book.update_book(updated_book.author, updated_book.title, updated_book.description, updated_book.rating)
