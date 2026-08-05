@@ -1,3 +1,5 @@
 /fastapienv
 .idea
 __pycache__/
+
+/TodoApp/todos.db

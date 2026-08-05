@@ -26,3 +26,13 @@ Get pip version:
 > uvicorn books:app --reload
 or
 > fastapi run <filename>.py # need fastapi[standard] installed
+
+### TODO app project
+
+## Running SQLITE
+
+>Usage:    
+  docker compose up -d                 # starts the container, creates ./todos.db if missing    
+  docker attach todo_sqlite            # interactive sqlite3 shell into the db    
+  docker compose exec sqlite sqlite3 /root/db/todos.db "SELECT * FROM todos;"   # one-off query    
+

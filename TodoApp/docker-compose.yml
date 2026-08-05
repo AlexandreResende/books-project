@@ -1,0 +1,10 @@
+services:
+  sqlite:
+    image: nouchka/sqlite3
+    container_name: todo_sqlite
+    stdin_open: true
+    tty: true
+    environment:
+      - SQLITE_DATABASE=todos.db
+    volumes:
+      - .:/root/db
