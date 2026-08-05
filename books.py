@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 
-from fastapi import  FastAPI, Path, Query, Response, status
+from fastapi import  FastAPI, Path, Query, Response, HTTPException, status
 
 from Entities.bookEntity import Book
 from Requests.createBookRequest import CreateBookRequest
@@ -39,8 +39,7 @@ async def get_book_by_id(response: Response, book_id: int = Path(gt=0)):
         if book.id == book_id:
             return book
 
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return { "message": "Book not found" }
+    raise HTTPException(status_code=404, detail="Book not found")
 
 @app.get("/books/")
 async def get_books_by_filter(rating: Optional[int] = Query(gt=0, lt=6, default=None), published_year_date: Optional[int] = Query(gt=1300, lt=datetime.now().year, default=None)):
@@ -60,8 +59,7 @@ async def update_book(book_id: int, updated_book: UpdateBookRequest, response: R
 
             return book
 
-    response.status_code = status.HTTP_404_NOT_FOUND
-    return { "message": "Book not found" }
+    raise HTTPException(status_code=404, detail="Book not found")
 
 @app.delete("/books/{book_id}")
 async def delete_book_by_id(book_id: int):
