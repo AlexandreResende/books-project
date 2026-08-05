@@ -1,6 +1,7 @@
 from typing import Optional
+from datetime import datetime
 
-from fastapi import  FastAPI, Response, status
+from fastapi import  FastAPI, Path, Response, status
 
 from Entities.bookEntity import Book
 from Requests.createBookRequest import CreateBookRequest
@@ -33,7 +34,7 @@ async def create_book(response: Response, new_book: CreateBookRequest):
     return {}
 
 @app.get("/books/{book_id}")
-async def get_book_by_id(book_id: int, response: Response):
+async def get_book_by_id(response: Response, book_id: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
             return book
