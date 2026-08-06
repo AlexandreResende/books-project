@@ -16,3 +16,12 @@ class Todos(Base):
         self.priority = priority
         self.completed = completed
         self.description = description
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "priority": self.priority,
+            "completed": self.completed,
+        }

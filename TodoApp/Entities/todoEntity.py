@@ -24,5 +24,6 @@ class TodoEntity():
             self.description
         )
 
-    def from_database(self):
-        pass
+    @staticmethod
+    def from_database(id, title, description, priority, completed):
+        return TodoEntity(title, priority, id, description, completed)
