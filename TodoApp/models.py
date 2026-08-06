@@ -10,3 +10,9 @@ class Todos(Base):
     description = Column(String)
     priority = Column(Integer)
     completed = Column(Boolean, default=False)
+
+    def __init__(self, title, priority, completed=False, description=None):
+        self.title = title
+        self.priority = priority
+        self.completed = completed
+        self.description = description
