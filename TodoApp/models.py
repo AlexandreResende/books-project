@@ -11,11 +11,12 @@ class Todos(Base):
     priority = Column(Integer)
     completed = Column(Boolean, default=False)
 
-    def __init__(self, title, priority, completed=False, description=None):
+    def __init__(self, title, priority, completed=False, description=None, id=None):
         self.title = title
         self.priority = priority
         self.completed = completed
         self.description = description
+        self.id = id
 
     def to_json(self):
         return {
