@@ -1,8 +1,7 @@
 from fastapi import FastAPI, HTTPException, Path, status
 
 import models
-from models import Todos
-from database import db_dependency, engine
+from database import engine
 from Requests.createTodoRequest import CreateTodoRequest
 from Requests.updateTodoRequest import UpdateTodoRequest
 from Entities.todoEntity import TodoEntity
