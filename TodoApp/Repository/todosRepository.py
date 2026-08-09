@@ -28,3 +28,9 @@ class TodosRepository:
         todos_model = self.db.query(Todos).all()
 
         return [TodoEntity.from_database(**todo_model.to_json()) for todo_model in todos_model]
+
+    def create_todo(self, todo: TodoEntity):
+        self.db.add(todo.to_database())
+        self.db.commit()
+
+        return

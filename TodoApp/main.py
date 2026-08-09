@@ -32,11 +32,8 @@ async def get_todo_by_id(repository: todos_repository, todo_id: int = Path(gt=0)
     return record
 
 @app.post("/todos", status_code=status.HTTP_201_CREATED)
-async def create_todo(db: db_dependency, todo_request: CreateTodoRequest):
-    todo = TodoEntity(**todo_request.model_dump())
-
-    db.add(todo.to_database())
-    db.commit()
+async def create_todo(repository: todos_repository, todo_request: CreateTodoRequest):
+    repository.create_todo(TodoEntity(**todo_request.model_dump()))
 
     return {}
 
