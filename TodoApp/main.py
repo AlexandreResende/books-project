@@ -1,10 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException, Path, status
-from typing import Annotated
-from sqlalchemy.orm import Session
+from fastapi import FastAPI, HTTPException, Path, status
 
 import models
 from models import Todos
-from database import engine, SessionLocal
+from database import db_dependency, engine
 from Requests.createTodoRequest import CreateTodoRequest
 from Requests.updateTodoRequest import UpdateTodoRequest
 from Entities.todoEntity import TodoEntity
@@ -14,21 +12,12 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close
-
-db_dependency = Annotated[Session, Depends(get_db)]
-
 @app.get("/healthz")
 async def health_check():
     return { "message": "Ok"}
 
 @app.get("/todos", status_code=status.HTTP_200_OK)
-async def get_all_todos(db: Annotated[Session, Depends(get_db)]):
+async def get_all_todos(db: db_dependency):
     todos = db.query(Todos).all()
 
     return { "todos": todos }
