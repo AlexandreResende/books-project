@@ -17,8 +17,8 @@ async def health_check():
     return { "message": "Ok"}
 
 @app.get("/todos", status_code=status.HTTP_200_OK)
-async def get_all_todos(db: db_dependency):
-    todos = db.query(Todos).all()
+async def get_all_todos(repository: todos_repository):
+    todos = repository.get_all_todos()
 
     return { "todos": todos }
 
