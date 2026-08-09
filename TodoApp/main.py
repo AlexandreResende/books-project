@@ -23,15 +23,13 @@ async def get_all_todos(db: db_dependency):
     return { "todos": todos }
 
 @app.get("/todos/{todo_id}", status_code=status.HTTP_200_OK)
-async def get_todo_by_id(db: db_dependency, todo_id: int = Path(gt=0)):
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+async def get_todo_by_id(repository: todos_repository, todo_id: int = Path(gt=0)):
+    record = repository.get_todo_by_id(todo_id)
 
-    if todo_model is None:
+    if record is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
 
-    todoEntity = TodoEntity.from_database(**todo_model.to_json())
-
-    return todoEntity
+    return record
 
 @app.post("/todos", status_code=status.HTTP_201_CREATED)
 async def create_todo(db: db_dependency, todo_request: CreateTodoRequest):

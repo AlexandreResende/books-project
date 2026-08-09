@@ -1,6 +1,8 @@
 from models import Todos
 from database import db_dependency
 
+from Entities.todoEntity import TodoEntity
+
 class TodosRepository:
     def __init__(self, db: db_dependency):
         self.db = db
@@ -13,3 +15,11 @@ class TodosRepository:
             return None
 
         return True
+
+    def get_todo_by_id(self, todo_id: int):
+        todo_model = self.db.query(Todos).filter(Todos.id == todo_id).first()
+
+        if todo_model is None:
+            return None
+
+        return TodoEntity.from_database(**todo_model.to_json())
