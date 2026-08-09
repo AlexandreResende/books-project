@@ -8,6 +8,7 @@ from database import engine, SessionLocal
 from Requests.createTodoRequest import CreateTodoRequest
 from Requests.updateTodoRequest import UpdateTodoRequest
 from Entities.todoEntity import TodoEntity
+from container import todos_repository
 
 app = FastAPI()
 
@@ -68,13 +69,10 @@ async def update_todo(db: db_dependency, updated_todo_request: UpdateTodoRequest
     return
 
 @app.delete("/todos/{todo_id}", status_code=status.HTTP_200_OK)
-async def delete_todo(db: db_dependency, todo_id: int = Path(gt=0)):
-    todo_model = db.query(Todos).filter(Todos.id == todo_id).first()
+async def delete_todo(repository: todos_repository, todo_id: int = Path(gt=0)):
+    result = repository.delete_todo(todo_id)
 
-    if todo_model is None:
+    if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
-
-    db.delete(todo_model)
-    db.commit()
 
     return { "message": "Record deleted" }
