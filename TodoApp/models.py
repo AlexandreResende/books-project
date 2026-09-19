@@ -14,13 +14,13 @@ class Users(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String)
 
-    def __init__(self, email, username, first_name, last_name, password, is_active, roles, id=None):
+    def __init__(self, email, username, first_name, last_name, hashed_password, is_active, roles, id=None):
         self.id = id
         self.email = email
         self.username = username
         self.first_name = first_name
         self.last_name = last_name
-        self.password = password
+        self.hashed_password = hashed_password
         self.is_active = is_active
         self.roles = roles
 
@@ -33,7 +33,7 @@ class Users(Base):
                 "last_name": self.last_name,
                 "is_active": self.is_active,
                 "roles": self.roles,
-                "password": self.password
+                "hashed_password": self.hashed_password
             }
 
 class Todos(Base):

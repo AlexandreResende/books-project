@@ -29,7 +29,7 @@ class UserEntity():
             email = self.email,
             first_name = self.first_name,
             last_name = self.last_name,
-            password = self.password,
+            hashed_password = self.password,
             is_active = self.is_active,
             roles = self.roles
         )
