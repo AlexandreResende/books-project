@@ -10,9 +10,9 @@ class Users(Base):
     username = Column(String, unique=True)
     first_name = Column(String)
     last_name = Column(String)
-    password = Column(String)
+    hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
-    role = Column(String)
+    roles = Column(String)
 
     def __init__(self, email, username, first_name, last_name, hashed_password, is_active, roles, id=None):
         self.id = id
@@ -24,17 +24,17 @@ class Users(Base):
         self.is_active = is_active
         self.roles = roles
 
-        def to_json(self):
-            return {
-                "id": self.id,
-                "email": self.email,
-                "username": self.username,
-                "first_name": self.first_name,
-                "last_name": self.last_name,
-                "is_active": self.is_active,
-                "roles": self.roles,
-                "hashed_password": self.hashed_password
-            }
+    def to_json(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "username": self.username,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "is_active": self.is_active,
+            "roles": self.roles,
+            "hashed_password": self.hashed_password
+        }
 
 class Todos(Base):
     __tablename__ = 'todos'

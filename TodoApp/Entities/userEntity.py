@@ -35,5 +35,5 @@ class UserEntity():
         )
 
     @staticmethod
-    def from_database(user_id: int, first_name: str, last_name: str, password: str, is_active: bool, roles: str):
-        return UserEntity(user_id, first_name, last_name, password, is_active, roles)
+    def from_database(id: int, username: str, email: str, first_name: str, last_name: str, hashed_password: str, is_active: bool, roles: str):
+        return UserEntity(username, email, first_name, last_name, hashed_password, is_active, roles, id)

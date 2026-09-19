@@ -12,3 +12,8 @@ class UsersRepository():
         self.db.commit()
 
         return
+
+    def get_users(self):
+        users = self.db.query(Users).all()
+
+        return [UserEntity.from_database(**user.to_json()) for user in users]
