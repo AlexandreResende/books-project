@@ -17,3 +17,11 @@ class UsersRepository():
         users = self.db.query(Users).all()
 
         return [UserEntity.from_database(**user.to_json()) for user in users]
+
+    def get_user_by_username(self, username: str):
+        user = self.db.query(Users).filter(Users.username == username).first()
+
+        if not user:
+            return None
+
+        return UserEntity.from_database(**user.to_json())

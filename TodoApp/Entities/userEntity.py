@@ -1,6 +1,9 @@
 from typing import Optional
+from passlib.context import CryptContext
 
 from models import Users
+
+bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 class UserEntity():
     id: Optional[int]
@@ -18,7 +21,7 @@ class UserEntity():
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
-        self.password = password
+        self.password = bcrypt_context.hash(password)
         self.is_active = is_active
         self.roles = roles
 
