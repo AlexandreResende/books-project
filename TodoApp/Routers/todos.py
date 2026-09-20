@@ -5,19 +5,22 @@ from Requests.updateTodoRequest import UpdateTodoRequest
 from Entities.todoEntity import TodoEntity
 from container import todos_repository
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/todos",
+    tags=["todos"],
+)
 
 @router.get("/healthz")
 async def health_check():
     return { "message": "Ok"}
 
-@router.get("/todos", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK)
 async def get_all_todos(repository: todos_repository):
     todos = repository.get_all_todos()
 
     return { "todos": todos }
 
-@router.get("/todos/{todo_id}", status_code=status.HTTP_200_OK)
+@router.get("/{todo_id}", status_code=status.HTTP_200_OK)
 async def get_todo_by_id(repository: todos_repository, todo_id: int = Path(gt=0)):
     record = repository.get_todo_by_id(todo_id)
 
@@ -26,13 +29,13 @@ async def get_todo_by_id(repository: todos_repository, todo_id: int = Path(gt=0)
 
     return record
 
-@router.post("/todos", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 async def create_todo(repository: todos_repository, todo_request: CreateTodoRequest):
     repository.create_todo(TodoEntity(**todo_request.model_dump()))
 
     return {}
 
-@router.put("/todos/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def update_todo(repository: todos_repository, updated_todo_request: UpdateTodoRequest, todo_id: int = Path(gt=0)):
     todo_new_data = updated_todo_request.model_dump()
     result = repository.update_todo(todo_id, todo_new_data)
@@ -42,7 +45,7 @@ async def update_todo(repository: todos_repository, updated_todo_request: Update
 
     return
 
-@router.delete("/todos/{todo_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{todo_id}", status_code=status.HTTP_200_OK)
 async def delete_todo(repository: todos_repository, todo_id: int = Path(gt=0)):
     result = repository.delete_todo(todo_id)
 

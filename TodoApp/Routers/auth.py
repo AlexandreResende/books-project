@@ -10,7 +10,10 @@ from jose import jwt, JWTError
 from container import users_repository
 from Requests.Auth.loginRequest import LoginRequest
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/auth",
+    tags=["auth"],
+)
 
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -18,7 +21,7 @@ SECRET_KEY = 'de4c91674143dfc54163c0f54774809cff3e4eb7b25b838d65f67adcf66f6fe1'
 ALGORITHM = 'HS256'
 EXPIRES_IN = 60 * 60 * 24
 
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl='token')
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     try:
@@ -36,7 +39,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid credentials')
 
-@router.get("/auth/")
+@router.get("/")
 async def get_user():
     return { "user": "authenticated" }
 
