@@ -24,8 +24,8 @@ class TodosRepository:
 
         return TodoEntity.from_database(**todo_model.to_json())
 
-    def get_all_todos(self):
-        todos_model = self.db.query(Todos).all()
+    def get_all_todos(self, owner_id: int):
+        todos_model = self.db.query(Todos).filter(Todos.owner_id == owner_id).all()
 
         return [TodoEntity.from_database(**todo_model.to_json()) for todo_model in todos_model]
 

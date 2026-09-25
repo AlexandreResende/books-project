@@ -15,8 +15,11 @@ async def health_check():
     return { "message": "Ok"}
 
 @router.get("/", status_code=status.HTTP_200_OK)
-async def get_all_todos(repository: todos_repository):
-    todos = repository.get_all_todos()
+async def get_all_todos(user: user_dependency, repository: todos_repository):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail ="Authentication failed")
+
+    todos = repository.get_all_todos(user.get('id'))
 
     return { "todos": todos }
 
