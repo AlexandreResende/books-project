@@ -21,11 +21,17 @@ async def get_all_todos(repository: todos_repository):
     return { "todos": todos }
 
 @router.get("/{todo_id}", status_code=status.HTTP_200_OK)
-async def get_todo_by_id(repository: todos_repository, todo_id: int = Path(gt=0)):
+async def get_todo_by_id(user: user_dependency, repository: todos_repository, todo_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication failed")
+
     record = repository.get_todo_by_id(todo_id)
 
     if record is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
+
+    if record.owner_id != user.get('id'):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
     return record
 
