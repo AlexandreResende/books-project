@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Path, status
 from Requests.createTodoRequest import CreateTodoRequest
 from Requests.updateTodoRequest import UpdateTodoRequest
 from Entities.todoEntity import TodoEntity
-from container import todos_repository
+from container import todos_repository, user_dependency
 
 router = APIRouter(
     prefix="/todos",
@@ -30,8 +30,11 @@ async def get_todo_by_id(repository: todos_repository, todo_id: int = Path(gt=0)
     return record
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_todo(repository: todos_repository, todo_request: CreateTodoRequest):
-    repository.create_todo(TodoEntity(**todo_request.model_dump()))
+async def create_todo(user: user_dependency, repository: todos_repository, todo_request: CreateTodoRequest):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication failed")
+
+    repository.create_todo(TodoEntity(**todo_request.model_dump(), owner_id=user.get('id')))
 
     return {}
 
