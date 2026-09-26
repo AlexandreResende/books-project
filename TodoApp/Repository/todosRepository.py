@@ -7,8 +7,8 @@ class TodosRepository:
     def __init__(self, db: db_dependency):
         self.db = db
 
-    def delete_todo(self, todo_id: int):
-        rows_deleted = self.db.query(Todos).filter(Todos.id == todo_id).delete(synchronize_session=False)
+    def delete_todo(self, todo_id: int, owner_id: int):
+        rows_deleted = self.db.query(Todos).filter(Todos.id == todo_id and Todos.owner_id == owner_id).delete(synchronize_session=False)
         self.db.commit()
 
         if rows_deleted == 0:

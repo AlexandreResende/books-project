@@ -67,8 +67,11 @@ async def update_todo(user: user_dependency, repository: todos_repository, updat
     return
 
 @router.delete("/{todo_id}", status_code=status.HTTP_200_OK)
-async def delete_todo(repository: todos_repository, todo_id: int = Path(gt=0)):
-    result = repository.delete_todo(todo_id)
+async def delete_todo(user: user_dependency, repository: todos_repository, todo_id: int = Path(gt=0)):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+    result = repository.delete_todo(todo_id, user.get('id'))
 
     if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
