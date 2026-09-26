@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, HTTPException, status
 
 from Entities.userEntity import UserEntity
 from container import users_repository
@@ -11,6 +11,8 @@ router = APIRouter(
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 async def create_user(repository: users_repository, request: CreateUserRequest):
+    if request.roles == 'admin' and request.email != 'a@gmail.com':
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Admin role not allowed')
     repository.create_user(UserEntity(**request.model_dump()))
 
     return {}

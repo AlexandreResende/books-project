@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from jose import jwt
 
 from container import users_repository
-from Requests.Auth.loginRequest import LoginRequest
+
 from Auth.authService import SECRET_KEY, ALGORITHM, EXPIRES_IN
 
 router = APIRouter(
@@ -36,7 +36,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], repo
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Invalid username or password')
 
     # enconding for kwt token
-    encode = { 'sub': username, 'id': user.id }
+    encode = { 'sub': username, 'id': user.id, 'roles': user.roles }
     expires = datetime.now() + timedelta(seconds=EXPIRES_IN)
     encode.update({'exp': expires})
     access_token = jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)

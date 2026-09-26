@@ -16,6 +16,15 @@ class TodosRepository:
 
         return True
 
+    def delete_todo_admin(self, todo_id: int):
+        rows_deleted = self.db.query(Todos).filter(Todos.id == todo_id).delete(synchronize_session=False)
+        self.db.commit()
+
+        if rows_deleted == 0:
+            return None
+
+        return True
+
     def get_todo_by_id(self, todo_id: int):
         todo_model = self.db.query(Todos).filter(Todos.id == todo_id).first()
 
@@ -26,6 +35,11 @@ class TodosRepository:
 
     def get_all_todos(self, owner_id: int):
         todos_model = self.db.query(Todos).filter(Todos.owner_id == owner_id).all()
+
+        return [TodoEntity.from_database(**todo_model.to_json()) for todo_model in todos_model]
+
+    def get_all_todos_admin(self):
+        todos_model = self.db.query(Todos).filter().all()
 
         return [TodoEntity.from_database(**todo_model.to_json()) for todo_model in todos_model]
 
