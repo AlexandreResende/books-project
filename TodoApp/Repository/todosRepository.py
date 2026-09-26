@@ -35,18 +35,7 @@ class TodosRepository:
 
         return
 
-    def update_todo(self, todo_id: int, todo_data):
-        print(todo_id)
-        todo_model = self.db.query(Todos).filter(Todos.id == todo_id).first()
-
-        print(todo_model.to_json())
-
-        if todo_model is None:
-            return todo_model
-
-        todo_entity = TodoEntity.from_database(**todo_model.to_json())
-        todo_entity.update_todo(**todo_data)
-
+    def update_todo(self, todo_entity: TodoEntity):
         self.db.merge(todo_entity.to_database())
         self.db.commit()
 

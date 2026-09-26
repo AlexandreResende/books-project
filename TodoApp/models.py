@@ -49,10 +49,10 @@ class Todos(Base):
     def __init__(self, title, priority, owner_id, completed=False, description=None, id=None):
         self.title = title
         self.priority = priority
+        self.owner_id = owner_id
         self.completed = completed
         self.description = description
         self.id = id
-        self.owner_id = owner_id
 
     def to_json(self):
         return {

@@ -20,12 +20,12 @@ class TodoEntity():
 
     def to_database(self):
         return Todos(
-            self.title,
-            self.priority,
-            self.owner_id,
-            self.completed,
-            self.description,
-            self.id
+            title=self.title,
+            priority=self.priority,
+            owner_id=self.owner_id,
+            completed=self.completed,
+            description=self.description,
+            id=self.id
         )
 
     def update_todo(self, title, description, priority, completed):
@@ -36,4 +36,11 @@ class TodoEntity():
 
     @staticmethod
     def from_database(id, title, description, priority, completed, owner_id):
-        return TodoEntity(title, priority, id, description, completed, owner_id)
+        return TodoEntity(
+            id=id,
+            title=title,
+            description=description,
+            priority=priority,
+            completed=completed,
+            owner_id=owner_id
+        )
