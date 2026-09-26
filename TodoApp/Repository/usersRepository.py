@@ -25,3 +25,11 @@ class UsersRepository():
             return None
 
         return UserEntity.from_database(**user.to_json())
+
+    def get_user_by_id(self, user_id: int):
+        user = self.db.query(Users).filter(Users.id == user_id).first()
+
+        if not user:
+            return None
+
+        return UserEntity.from_database(**user.to_json())

@@ -22,3 +22,12 @@ async def get_users(repository: users_repository):
     users = repository.get_users()
 
     return { 'users': users }
+
+@router.get('/{user_id}')
+async def get_user_by_id(repository: users_repository, user_id: int):
+    user = repository.get_user_by_id(user_id)
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
+
+    return user
