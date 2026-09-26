@@ -33,3 +33,9 @@ class UsersRepository():
             return None
 
         return UserEntity.from_database(**user.to_json())
+
+    def update_user(self, user: UserEntity):
+        self.db.merge(user.to_database())
+        self.db.commit()
+
+        return True

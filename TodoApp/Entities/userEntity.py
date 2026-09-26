@@ -39,4 +39,10 @@ class UserEntity():
 
     @staticmethod
     def from_database(id: int, username: str, email: str, first_name: str, last_name: str, hashed_password: str, is_active: bool, roles: str):
-        return UserEntity(username, email, first_name, last_name, hashed_password, is_active, roles, id)
+        user = UserEntity(username, email, first_name, last_name, '', is_active, roles, id)
+        user.password = hashed_password
+
+        return user
+
+    def update_password(self, password: str):
+        self.password = bcrypt_context.hash(password)

@@ -32,7 +32,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], repo
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid credentials')
 
-    if bcrypt_context.verify(password, user.password):
+    if not bcrypt_context.verify(password, user.password):
         raise HTTPException(status.HTTP_403_FORBIDDEN, detail='Invalid username or password')
 
     # enconding for kwt token
