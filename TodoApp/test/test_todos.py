@@ -133,3 +133,15 @@ def test_update_authenticated_with_invalid_data(test_todo):
     response = client.put('/todos/1', json=request_data)
 
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
+
+def test_delete_authenticated(test_todo):
+    response = client.delete('/todos/1')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == { 'message': 'Record deleted' }
+
+def test_delete_authenticated_with_invalid_id(test_todo):
+    response = client.delete('/todos/99')
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == { 'detail': 'Record not found' }
