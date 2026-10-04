@@ -73,3 +73,38 @@ def test_read_one_authenticated(test_todo):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == { 'title': 'Learn to code', 'description': 'Need to learn everyday', 'priority': 1, 'completed': False, 'owner_id': 1, 'id': 1 }
+
+def test_read_one_authenticated_not_found(test_todo):
+    response = client.get('/todos/2')
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {
+        'detail': 'Todo not found'
+    }
+
+def test_create_authenticated(test_todo):
+    request_data = {
+        'title': 'Learn to code',
+        'description': 'Need to learn everyday',
+        'priority': 1,
+        'completed': False,
+    }
+    response = client.post('/todos', json=request_data)
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+    # testing if the record is in the DB
+    # db = TestingSessionLocal()
+    # model = db.query(Todos).filter(Todos.id == 2).first()
+    # assert model.title == 'Learn to code'
+
+def test_create_authenticated_with_invalid_data(test_todo):
+    request_data = {
+        'title': 'Learn to code',
+        'description': 'Need to learn everyday',
+        'priority': 10,
+        'completed': False,
+    }
+    response = client.post('/todos', json=request_data)
+
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_CONTENT
