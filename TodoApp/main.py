@@ -8,6 +8,10 @@ app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
+@app.get("/healthz")
+async def health_check():
+    return { "message": "Ok"}
+
 app.include_router(auth.router)
 app.include_router(todos.router)
 app.include_router(users.router)

@@ -10,10 +10,6 @@ router = APIRouter(
     tags=["todos"],
 )
 
-@router.get("/healthz")
-async def health_check():
-    return { "message": "Ok"}
-
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_all_todos(user: user_dependency, repository: todos_repository):
     if user is None:
